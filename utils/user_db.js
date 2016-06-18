@@ -32,8 +32,7 @@ var nextid = 0;
   */
 function createUser(email, forename, surname) {
     var date = new Date();
-    var created = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
-    var user = { "email": email, "forename": forename, "surname": surname, "created": created };
+    var user = { "email": email, "forename": forename, "surname": surname, "created": date };
     users[nextid.toString()] = user;
     var currentid = nextid;
     nextid++;

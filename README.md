@@ -4,6 +4,7 @@ An API to manage a user persistence layer (CRUD)
 ```
 npm install
 ```
+**NOTE**: Some of the dependancies should really be installed globally (cucumber, express etc.), but I've kept them local some everything is self contained. 
 ## Usage
 ```
 npm start
