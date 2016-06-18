@@ -27,7 +27,7 @@ npm start
 All the APIs return:
     `{ "success": true/false, "user": string/user object }`  
 USer Object:
-    `{ "email": "**_email_**", "forename": "**_forename_**", "surname": "**_surname_**", "created": "**_dd mmm yyyy_**" }  
+    `{ "email": "**_email_**", "forename": "**_forename_**", "surname": "**_surname_**", "created": "**_Date_**" }  
 
 ## Tests
 To run the Cucumber tests:
