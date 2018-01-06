@@ -1,15 +1,15 @@
 {
   "name": "userservice",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A simple API to manage a user persistance layer",
   "main": "userservice.js",
   "scripts": {
-    "start": "node %npm_package_main%",
+    "start": "cross-var node $npm_package_name",
     "forever-start": "forever start %npm_package_main%",
     "forever-stop": "forever stop %npm_package_main%",
     "pretest": "npm run forever-start",
     "posttest": "npm run forever-stop",
-    "test": "cucumber-js || npm run forever-stop && exit 1"        
+    "test": "cucumber-js || npm run forever-stop && exit 1"
   },
   "author": "Mark Harland",
   "license": "UNLICENSED",
@@ -24,11 +24,8 @@
     "port": 8081
   },
   "dependencies": {
-    "express": "^4.13.4"
-  },
-  "devDependencies": {
-    "cucumber": "^1.0.0",
-    "forever": "^0.15.2",
-    "request": "^2.72.0"
+    "body-parser": "^1.18.2",
+    "cross-var": "^1.1.0",
+    "express": "^4.16.2"
   }
 }

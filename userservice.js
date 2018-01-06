@@ -1,123 +1,40 @@
 /*
  *
- * Title:       userservice.js 
+ * Title:       userservice.js
  * Description: Simple api to manage a user persistance layer.
- * 
- * Copyright:   Copyright (c) 2016
+ *
+ * Copyright:   Copyright (c) 2018
  * Author:      Mark Harland
- * 
+ *
  */
+'use strict';
 
 var express = require('express');
+var bodyparser = require('body-parser');
+var users = require('./routes/users');
 var app = express();
 
-var npmpackage = require('./package');
-var db = require('./utils/user_db');
+app.use(bodyparser.json());
 
-var data = {
-    "success": true,
-    "user": ""
-};
+app.use('/users', users);
 
-/*
-  * blank
-  * -----
-  * A helper function to detect if a string is undefined or empty
-  * 
-  * input: str - the string to test
-  * output: true if str is undefined or empty
-  * 			  false if str not undefined and not empty
-  */
-function blank(str) { return !(str && str !== ''); }
-
-//  setup the view engine
-app.set('views', './views');
-app.set('view engine', 'pug');
-
-//  set the port number
-app.set('port', npmpackage.config.port);
-
-
-//  create the routes
-
-//  simple route for about - displays name & version
-app.get('/about', function(req, res, next) {
-    console.log('in about');
-    data.success = true;
-    data.user = npmpackage.config.displayname + ' (Version ' + npmpackage.version + ')';
-    res.json(data);
+// Middleware with an arity of 4 are called for error handling
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(err.status || 500).send({ error: err.message });
 });
 
-//  simple route for create, expects email, forename and surname passed on uri, ignores everything else
-app.get('/create', function(req, res, next) {
-    console.log('in create');
-    var email = req.query.email;
-    var forename = req.query.forename;
-    var surname = req.query.surname;
-
-    if (!blank(email) && !blank(forename) && !blank(surname)) {
-        var status = db.createUser(email, forename, surname);
-        data.success = status.success;
-        data.user = status.user;        
-    } else {
-        data.success = false;
-        data.user = 'must have email, forename and surname';
-    }
-    res.json(data);
+// If no other middleware has been invoked by this point, respond with a 404
+app.use((req, res, next) => {
+  var method = req.method;
+  var proto = req.protocol;
+  var server = req.hostname;
+  var url = req.originalUrl;
+  console.warn(method + ' of ' + proto + '://' + server + url + ' - The requested resource could not be found');
+  res.status(404).send({ error: 'The requested resource could not be found' });
 });
 
-//  simple route for read, expects userid on uri, ignores everything else
-app.get('/read', function(req, res, next) {
-    console.log('in read');
-    var uid = req.query.userid;
-
-    if (!blank(uid)) {
-        var status = db.readUser(uid);
-        data.success = status.success;
-        data.user = status.user;        
-    } else {
-        data.success = false;
-        data.user = 'must have userid';
-    }
-    res.json(data);
-});
-
-//  simple route for update, expects userid and any of email, forename or surname passed on uri, ignores everything else
-app.get('/update', function(req, res, next) {
-    console.log('in update');
-    var uid = req.query.userid;
-    var email = req.query.email;
-    var forename = req.query.forename;
-    var surname = req.query.surname;
-
-    if (!blank(uid)) {
-        var status = db.updateUser(uid, email, forename, surname);
-        data.success = status.success;
-        data.user = status.user;      
-    } else {
-        data.success = false;
-        data.user = 'must have userid';
-    }
-    res.json(data);
-});
-
-//  simple route for delete, expects userid on uri, ignores everything else
-app.use('/delete', function(req, res, next) {
-    console.log('in delete');
-    var uid = req.query.userid;
-
-    if (!blank(uid)) {
-        var status = db.deleteUser(uid);
-        data.success = status.success;
-        data.user = status.user;        
-    } else {
-        data.success = false;
-        data.user = 'must have userid';
-    }
-    res.json(data);
-});
-
-//  start the app
-var userservice = app.listen(app.get('port'), function () {
-    console.log(npmpackage.config.displayname + '(version ' + npmpackage.version + ') listening on port ' + app.get('port'));
+var server = app.listen(8081, function() {
+  var port = server.address().port;
+  console.log('Service listening on port %s', port);
 });
