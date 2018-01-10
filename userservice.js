@@ -9,12 +9,14 @@
  */
 'use strict';
 
+var pe = process.env;
 var express = require('express');
-var bodyparser = require('body-parser');
+var bodyParser = require('body-parser')
 var users = require('./routes/users');
 var app = express();
 
-app.use(bodyparser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use('/users', users);
 
@@ -34,7 +36,9 @@ app.use((req, res, next) => {
   res.status(404).send({ error: 'The requested resource could not be found' });
 });
 
-var server = app.listen(8081, function() {
+var server = app.listen(pe.npm_package_config_port, function() {
+  var name = pe.npm_package_config_displayname;
+  var host = pe.npm_package_config_host;
   var port = server.address().port;
-  console.log('Service listening on port %s', port);
+  console.log('%s listening on http://%s:%s', name, host, port);
 });

@@ -38,3 +38,5 @@ npm test
 To further enhance this example I would:
 - log to a file rather than the console
 - use a 'proper' database rather than the JSON object array I've used
+-  curl -H 'Content-Type: application/json' -XPUT http://localhost:9200/users?pretty -d "{\"settings\":{\"number_of_shards\":1,\"number_of_replicas\":0}}"
+
