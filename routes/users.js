@@ -16,11 +16,12 @@ var Message = require('../model/message');
 // Create
 router.post('/', function(req, res, next) {
   var message = new Message(req);
-  if (message.errors) {
-    res.status(message.errors.code);
-    console.error(JSON.stringify(message));
-    res.send(message);
-  } else res.status(201).send('{okay}');
+  if (!message.status && message.errors !== undefined) {
+    res.status(message.errors[0].status).send(message);
+  } else {
+    message.addDataItem({ 'id': '1', 'forename': 'Test', 'surname': 'Tester', 'email': 'test.tester@somewhere.com' });
+    res.status(201).send(message);
+  }
   // 200, 409
 });
 
