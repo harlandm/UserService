@@ -12,12 +12,14 @@
 var pe = process.env;
 var express = require('express');
 var bodyParser = require('body-parser');
+var about = require('./routes/about');
 var users = require('./routes/users');
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use('/about', about);
 app.use('/users', users);
 
 // Middleware with an arity of 4 are called for error handling

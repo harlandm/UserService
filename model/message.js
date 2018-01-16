@@ -15,7 +15,7 @@ var Message = function(req) {
 };
 
 Message.prototype.validateRequest = function(req) {
-  if (!emailRegex.test(req.body.email)) this.addErrorItem({ 'status': '400', 'message': 'Bad Request' });
+  if (!emailRegex.test(req.body.email)) this.addErrorItem({ 'status': '400', 'message': 'Bad Request - Invalid email' });
 };
 
 Message.prototype.setData = function(data) {
