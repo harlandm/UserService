@@ -13,6 +13,7 @@ var express = require('express');
 var router = express.Router();
 var npmpackage = require('../package');
 
+/*eslint no-unused-vars: ["error", { "argsIgnorePattern": "next" }]*/
 router.get('/', function(req, res, next) {
   res.status(200).send(JSON.stringify({ 'name': npmpackage.config.displayname,
     'version': npmpackage.version, 'about': npmpackage.description }, 2));

@@ -1,11 +1,11 @@
 /*
  *
- * Title:       test_steps.js 
+ * Title:       test_steps.js
  * Description: Step definitions for the Scenarios.
- * 
+ *
  * Copyright:   Copyright (c) 2016
  * Author:      Mark Harland
- * 
+ *
  */
 'use strict';
 
@@ -19,10 +19,10 @@ module.exports = function() {
   this.When(/^I get the "([^"]*)" document$/, function(arg1, callback) {
     var host = npmpackage.config.host;
     var port = npmpackage.config.port;
-    var uri = 'http://' + host + ":" + port + '/about';
+    var uri = 'http://' + host + ':' + port + '/about';
 
-    request(uri, function (error, resp, body) {
-      if (!error && resp.statusCode == 200) {
+    request(uri, function(error, resp, body) {
+      if (!error && resp.statusCode === 200) {
         response = body;
         callback();
       } else {

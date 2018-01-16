@@ -14,6 +14,7 @@ var router = express.Router();
 var Message = require('../model/message');
 
 // Create
+/*eslint no-unused-vars: ["error", { "argsIgnorePattern": "next" }]*/
 router.post('/', function(req, res, next) {
   var message = new Message(req);
   if (!message.status && message.errors !== undefined) {

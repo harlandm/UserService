@@ -23,6 +23,7 @@ app.use('/about', about);
 app.use('/users', users);
 
 // Middleware with an arity of 4 are called for error handling
+/*eslint no-unused-vars: ["error", { "argsIgnorePattern": "next" }]*/
 app.use(function(err, req, res, next) {
   console.error(err.stack);
   res.status(err.status || 500).send({ error: err.message });
