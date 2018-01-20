@@ -12,11 +12,13 @@
 var express = require('express');
 var router = express.Router();
 var npmpackage = require('../package');
+var Message = require('../model/message');
 
 /*eslint no-unused-vars: ["error", { "argsIgnorePattern": "next" }]*/
 router.get('/', function(req, res, next) {
-  res.status(200).send(JSON.stringify({ 'name': npmpackage.config.displayname,
-    'version': npmpackage.version, 'about': npmpackage.description }, 2));
+  var message = new Message();
+  message.addDataItem({ 'name': npmpackage.config.displayname, 'version': npmpackage.version, 'about': npmpackage.description });
+  res.status(200).send(message);
 });
 
 module.exports = router;

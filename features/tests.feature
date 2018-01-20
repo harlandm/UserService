@@ -5,7 +5,7 @@ Feature: Test the User Service
 
     Scenario: Get the version of the service
         When I get the "/about" document
-        Then I should get a JSON object with "name" set to "UserService"
+        Then I should get a JSON object with "success" set to "true"
 
 #    Scenario Outline: Play with the service
 #        When I "<crud>" a user on the User Service with "<params>"

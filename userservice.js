@@ -14,6 +14,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var about = require('./routes/about');
 var users = require('./routes/users');
+var Message = require('./model/message');
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,7 +27,9 @@ app.use('/users', users);
 /*eslint no-unused-vars: ["error", { "argsIgnorePattern": "next" }]*/
 app.use(function(err, req, res, next) {
   console.error(err.stack);
-  res.status(err.status || 500).send({ error: err.message });
+  var message = new Message();
+  message.addErrorItem({ 'status': err.status || 500, 'message': err.message });
+  res.status(message.errors[0].status).send(message);
 });
 
 // If no other middleware has been invoked by this point, respond with a 404
@@ -36,7 +39,10 @@ app.use((req, res, next) => {
   var server = req.hostname;
   var url = req.originalUrl;
   console.warn(method + ' of ' + proto + '://' + server + url + ' - The requested resource could not be found');
-  res.status(404).send({ error: 'The requested resource could not be found' });
+
+  var message = new Message();
+  message.addErrorItem({ 'status': 404, 'message': 'The requested resource could not be found' });
+  res.status(message.errors[0].status).send(message);
 });
 
 var server = app.listen(pe.npm_package_config_port, function() {

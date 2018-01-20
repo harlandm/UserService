@@ -12,6 +12,7 @@
 var express = require('express');
 var router = express.Router();
 var Message = require('../model/message');
+var esClient = require('../utils/esclient');
 
 // Create
 /*eslint no-unused-vars: ["error", { "argsIgnorePattern": "next" }]*/
@@ -29,8 +30,7 @@ router.post('/', function(req, res, next) {
 // Read
 router.get('/', function(req, res, next) {
   //var uid = req.query.uid;
-  console.log('READ - %s', req.originalUrl);
-  res.status(200).send('{user:"Mark"}');
+  esClient.performESSearch(true, res);
   // 404, 400???
 });
 
