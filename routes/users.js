@@ -29,8 +29,7 @@ router.post('/', function(req, res, next) {
 
 // Read
 router.get('/', function(req, res, next) {
-  //var uid = req.query.uid;
-  esClient.performESSearch(true, res);
+  esClient.performESSearch(req, res);
   // 404, 400???
 });
 

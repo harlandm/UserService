@@ -4,9 +4,6 @@ var pe = process.env;
 var elasticsearch = require('elasticsearch');
 var Message = require('../model/message');
 var eshost = pe.npm_package_config_eshost;
-//var query = '{"query":{"bool":{"must":[{"match":{"_id":{"query":"Rpp_z2ABAxpB461Ztd7k"}}}]}}}';
-//var q = '{"query":{"bool":{"must":[{"match":{"_id":{"query":"Rpp_Z2ABAxpB461Ztd7k"}}}]}}}';
-
 
 var esclient = new elasticsearch.Client({
   host: eshost
@@ -14,25 +11,28 @@ var esclient = new elasticsearch.Client({
 
 function processHits(results, res) {
   var message = new Message();
-  console.log('res = ' + JSON.stringify(results));
   for (var hit in results) {
     if (results.hasOwnProperty(hit)) {
-      message.addDataItem({ 'id': results[hit]._id,
+      message.addDataItem({
+        'id': results[hit]._id,
         'forename': results[hit]._source.forename,
         'surname': results[hit]._source.surname,
-        'email': results[hit]._source.email });
+        'email': results[hit]._source.email,
+        'created': results[hit]._source.created
+      });
     }
   }
   res.status(200).send(message);
 }
 
-function performESSearch(query, res) {
-  //esclient.search({ index: 'users'/*, body: query*/ }, function(err, result) {
+function performESSearch(req, res) {
+  var query = (req.query.id !== undefined && req.query.id.length !== 0) ? '{"query":{"match":{"_id":{"query":"' + req.query.id + '"}}}}' : '{"query":{"match_all":{}}}';
   esclient.search({ index: 'users', body: query }, function(err, result) {
-    if (err) {
+    if (err || result.hits.total === 0) {
       var message = new Message();
-      message.addErrorItem({ 'status': err.statusCode || 500, 'message': err });
-      res.status(500).send(message);
+      if (err) message.addErrorItem({ 'status': err.statusCode || 500, 'message': err });
+      else message.addErrorItem({ 'status': 404, 'message': 'The requested resource could not be found' });
+      res.status(message.errors[0].status).send(message);
     } else processHits(result.hits.hits, res);
   });
 } exports.performESSearch = performESSearch;
