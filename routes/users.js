@@ -17,13 +17,15 @@ var esClient = require('../utils/esclient');
 // Create
 /*eslint no-unused-vars: ["error", { "argsIgnorePattern": "next" }]*/
 router.post('/', function(req, res, next) {
-  var message = new Message(req);
+  var message = new Message();
+  message.validateRequest(req);
   if (!message.status && message.errors !== undefined) {
     res.status(message.errors[0].status).send(message);
-  } else {
-    message.addDataItem({ 'id': '1', 'forename': 'Test', 'surname': 'Tester', 'email': 'test.tester@somewhere.com' });
-    res.status(201).send(message);
-  }
+  } else esClient.performESIndex(req, res);
+  // {
+  // message.addDataItem({ 'id': '1', 'forename': 'Test', 'surname': 'Tester', 'email': 'test.tester@somewhere.com' });
+  // res.status(201).send(message);
+  // }
   // 200, 409
 });
 
@@ -42,8 +44,7 @@ router.put('/', function(req, res, next) {
 
 // Delete
 router.delete('/', function(req, res, next) {
-  console.log('DELETE - %s', JSON.stringify(req.body, 2));
-  res.status(200).send('{okay}');
+  esClient.performESDelete(req, res);
   // 202?, 404
 });
 

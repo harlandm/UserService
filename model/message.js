@@ -7,11 +7,10 @@ var ErrorItem = function(err) {
   this.message = err.message;
 };
 
-var Message = function(req) {
+var Message = function() {
   this.status = undefined;
   this.data = undefined;
   this.errors = undefined;
-  if (req) this.validateRequest(req);
 };
 
 Message.prototype.validateRequest = function(req) {
